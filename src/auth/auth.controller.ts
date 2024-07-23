@@ -39,6 +39,11 @@ export class AuthController {
     return this.authService.logout(user);
   }
 
+  @Get('health-check')
+  async getHealth() {
+    return { message: 'healthy' };
+  }
+
   @Get('profile')
   @UseGuards(AuthGuard('jwt'))
   async getProfile(@Req() req) {
