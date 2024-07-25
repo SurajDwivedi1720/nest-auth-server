@@ -12,7 +12,9 @@ export class AuthController {
   ) {}
 
   @Post('register')
-  async register(@Body() body: { email: string; password: string }) {
+  async register(
+    @Body() body: { email: string; password: string; name: string },
+  ) {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(body.password, salt);
     const user = await this.usersService.create({

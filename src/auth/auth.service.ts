@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcryptjs from 'bcryptjs';
-import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AuthService {
@@ -22,16 +21,22 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const sessionId = uuidv4();
-    await this.usersService.updateSessionId(user.email, sessionId);
+    await this.usersService.updateSessionId(user.email, user.email);
 
-    const payload = { email: user.email, sub: user._id, sessionId };
+    const payload = {
+      email: user.email,
+      sub: user._id,
+      sessionId: user.email,
+    };
+    const accessToken = this.jwtService.sign(payload, { expiresIn: '1h' });
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: accessToken,
+      name: user.name,
     };
   }
 
   async logout(user: any) {
     await this.usersService.updateSessionId(user.email, null);
+    return { success: true };
   }
 }
