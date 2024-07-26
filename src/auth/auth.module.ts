@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { UsersModule } from '../users/users.module';
-import { AuthController } from './auth.controller';
+import { CustomersModule } from '../customers/customers.module';
+import { AgentsModule } from '../agents/agents.module';
+import { CustomerAuthController } from './auth-customer.controller';
+import { AgentAuthController } from './auth-agent.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 
@@ -24,9 +26,10 @@ import { JwtStrategy } from './jwt.strategy';
         },
       }),
     }),
-    UsersModule,
+    CustomersModule,
+    AgentsModule,
   ],
-  controllers: [AuthController],
+  controllers: [CustomerAuthController, AgentAuthController],
   providers: [AuthService, JwtStrategy],
   exports: [AuthService],
 })
